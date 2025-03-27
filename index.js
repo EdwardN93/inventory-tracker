@@ -20,6 +20,7 @@ function setItem(itemName, itemQuantity, itemLocation) {
   let items = JSON.parse(localStorage.getItem("items")) || [];
   console.log(items);
   const item = {
+    id: Date.now(),
     itemName: itemName,
     itemQuantity: Number(itemQuantity),
     itemLocation: itemLocation,
@@ -37,6 +38,7 @@ function getItemsAndDisplay() {
 
     data.forEach((item, index) => {
       const li = document.createElement("li");
+      li.dataset.id = item.id;
       const h3Name = document.createElement("h3");
       h3Name.textContent = `Name: ${item.itemName}`;
 
@@ -52,6 +54,20 @@ function getItemsAndDisplay() {
       li.append(h3Name, pStock, pLocation, editBtn);
 
       ulInventory.append(li);
+
+      editBtn.addEventListener("click", (e) => {
+        const currentItem = e.target.closest("li");
+        const inputNewName = document.createElement("input");
+        inputNewName.setAttribute("type", "text");
+        inputNewName.value = document
+          .querySelector("h3")
+          .innerText.split(" ")[1];
+
+        console.log(inputNewName);
+        currentItem.innerHTML = "";
+        currentItem.append(inputNewName);
+        console.log(currentItem.dataset.id);
+      });
     });
     checkForLowStock(data);
   } else {
@@ -63,9 +79,9 @@ function getItemsAndDisplay() {
   }
 }
 
-function checkForLowStock(item = null) {
+function checkForLowStock(item = []) {
   const lowStock =
-    item !== null ? item.filter((item) => item.itemQuantity < 5) : "";
+    item.length > 0 ? item.filter((item) => item.itemQuantity < 5) : [];
 
   ulStockAlert.innerHTML = "";
 

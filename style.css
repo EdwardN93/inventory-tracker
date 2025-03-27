@@ -12,6 +12,7 @@ body {
   background-color: #f4f4f9;
   color: #333;
   display: flex;
+  position: relative;
 }
 
 .container {
@@ -133,6 +134,7 @@ button:hover {
 .inventory-list {
   list-style: none;
   padding: 0;
+  margin-top: 1.2rem;
 }
 
 .inventory-list li,
@@ -160,4 +162,62 @@ button:hover {
 
 .inventory-list li button:hover {
   background-color: #c82333;
+}
+
+.modal {
+  position: fixed;
+  margin: 0 auto;
+  background-color: #333333d4;
+  min-height: 100vh;
+  width: 100vw;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.close-btn:hover {
+  transform-origin: center;
+  transform: scale(1.5);
+}
+
+.modal-container {
+  position: relative;
+  display: flex;
+  max-width: 30%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #fff;
+  padding: 4rem 6rem;
+  border-radius: 10px;
+  gap: 1.2rem;
+}
+
+.modal-form {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  text-align: left;
+  width: 100%;
+  gap: 1.2rem;
+}
+
+.modal-form div {
+  width: 100%;
+}
+
+.btn-div {
+  align-self: center;
+  justify-self: center;
+  text-align: center;
 }
