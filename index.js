@@ -1,14 +1,19 @@
 "use strict";
-const form = document.querySelector("#addItemSection");
+const form = document.querySelector("#addItemForm");
 const itemName = document.querySelector("#itemName");
 const itemQuantity = document.querySelector("#itemQuantity");
 const itemLocation = document.querySelector("#itemLocation");
-const ul = document.querySelector("#inventoryList");
+const ulInventory = document.querySelector("#inventoryList");
+const ulStockAlert = document.querySelector("#stockAlertList");
+const lowStockAlert = document.querySelector("#lowStockAlert");
+
+const btnClearLocalStorage = document.querySelector("#clearLocalStorage");
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   setItem(itemName.value, itemQuantity.value, itemLocation.value);
   getItemsAndDisplay();
+  form.reset();
 });
 
 function setItem(itemName, itemQuantity, itemLocation) {
@@ -16,7 +21,7 @@ function setItem(itemName, itemQuantity, itemLocation) {
   console.log(items);
   const item = {
     itemName: itemName,
-    itemQuantity: itemQuantity,
+    itemQuantity: Number(itemQuantity),
     itemLocation: itemLocation,
   };
 
@@ -28,9 +33,46 @@ function getItemsAndDisplay() {
   const data = JSON.parse(localStorage.getItem("items"));
   if (data) {
     console.log(data);
-    ul.innerHTML = "";
+    ulInventory.innerHTML = "";
 
-    data.forEach((item) => {
+    data.forEach((item, index) => {
+      const li = document.createElement("li");
+      const h3Name = document.createElement("h3");
+      h3Name.textContent = `Name: ${item.itemName}`;
+
+      const pStock = document.createElement("p");
+      pStock.textContent = `Stock: ${item.itemQuantity}`;
+
+      const pLocation = document.createElement("p");
+      pLocation.textContent = `Location: ${item.itemLocation}`;
+
+      const editBtn = document.createElement("button");
+      editBtn.innerHTML = "Edit";
+
+      li.append(h3Name, pStock, pLocation, editBtn);
+
+      ulInventory.append(li);
+    });
+    checkForLowStock(data);
+  } else {
+    ulInventory.innerHTML = "";
+    const message = document.createElement("li");
+    message.dataset.errMessage = "Nothing stored. Please add items";
+    message.textContent = message.dataset.errMessage;
+    ulInventory.append(message);
+  }
+}
+
+function checkForLowStock(item = null) {
+  const lowStock =
+    item !== null ? item.filter((item) => item.itemQuantity < 5) : "";
+
+  ulStockAlert.innerHTML = "";
+
+  if (lowStock.length > 0) {
+    lowStockAlert.classList.remove("hidden");
+
+    lowStock.forEach((item) => {
       const li = document.createElement("li");
       const h3Name = document.createElement("h3");
       h3Name.textContent = `Name: ${item.itemName}`;
@@ -42,8 +84,22 @@ function getItemsAndDisplay() {
       pLocation.textContent = `Location: ${item.itemLocation}`;
 
       li.append(h3Name, pStock, pLocation);
-      ul.append(li);
+      ulStockAlert.append(li);
     });
-  } else console.log(`Nothing in storage`);
+  } else {
+    ulStockAlert.innerHTML = "";
+    lowStockAlert.classList.add("hidden");
+  }
+
+  console.log(lowStock);
 }
+
+function clearLocalStorage() {
+  localStorage.clear();
+  getItemsAndDisplay();
+  checkForLowStock();
+}
+
+btnClearLocalStorage.addEventListener("click", clearLocalStorage);
+
 getItemsAndDisplay();

@@ -3,6 +3,9 @@
   padding: 0;
   box-sizing: border-box;
 }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   font-family: "Arial", sans-serif;
@@ -101,7 +104,7 @@ input {
 }
 
 button {
-  width: 100%;
+  max-width: fit-content;
   padding: 12px;
   background-color: #28a745;
   color: white;
@@ -132,7 +135,8 @@ button:hover {
   padding: 0;
 }
 
-.inventory-list li {
+.inventory-list li,
+.stock-alert-list li {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
