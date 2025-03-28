@@ -7,6 +7,9 @@ const ulInventory = document.querySelector("#inventoryList");
 const ulStockAlert = document.querySelector("#stockAlertList");
 const lowStockAlert = document.querySelector("#lowStockAlert");
 
+const editModal = document.querySelector("#modal");
+const btnCloseModal = document.querySelector("#m-close-btn");
+
 const btnClearLocalStorage = document.querySelector("#clearLocalStorage");
 
 form.addEventListener("submit", (e) => {
@@ -57,14 +60,13 @@ function getItemsAndDisplay() {
 
       editBtn.addEventListener("click", (e) => {
         const currentItem = e.target.closest("li");
-        const inputNewName = document.createElement("input");
-        inputNewName.setAttribute("type", "text");
-        inputNewName.value = document
-          .querySelector("h3")
-          .innerText.split(" ")[1];
 
+        editModal.classList.remove("hidden");
+        btnCloseModal.addEventListener("click", () => {
+          editModal.classList.add("hidden");
+        });
         console.log(inputNewName);
-        currentItem.innerHTML = "";
+        // currentItem.innerHTML = "";
         currentItem.append(inputNewName);
         console.log(currentItem.dataset.id);
       });

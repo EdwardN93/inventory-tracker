@@ -164,6 +164,10 @@ button:hover {
   background-color: #c82333;
 }
 
+.modal.hidden {
+  display: none;
+}
+
 .modal {
   position: fixed;
   margin: 0 auto;
