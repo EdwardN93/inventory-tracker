@@ -7,8 +7,15 @@ const ulInventory = document.querySelector("#inventoryList");
 const ulStockAlert = document.querySelector("#stockAlertList");
 const lowStockAlert = document.querySelector("#lowStockAlert");
 
+const modalTitle = document.querySelector("#m-title");
+const modalForm = document.querySelector("#modal-form");
 const editModal = document.querySelector("#modal");
+const modalInputId = document.querySelector("#m-id");
+const modalProductName = document.querySelector("#m-product-name");
+const modalProductQuantity = document.querySelector("#m-product-qty");
+const modalProductLocation = document.querySelector("#m-product-location");
 const btnCloseModal = document.querySelector("#m-close-btn");
+const btnSaveModal = document.querySelector("#m-save-btn");
 
 const btnClearLocalStorage = document.querySelector("#clearLocalStorage");
 
@@ -21,7 +28,7 @@ form.addEventListener("submit", (e) => {
 
 function setItem(itemName, itemQuantity, itemLocation) {
   let items = JSON.parse(localStorage.getItem("items")) || [];
-  console.log(items);
+
   const item = {
     id: Date.now(),
     itemName: itemName,
@@ -36,7 +43,6 @@ function setItem(itemName, itemQuantity, itemLocation) {
 function getItemsAndDisplay() {
   const data = JSON.parse(localStorage.getItem("items"));
   if (data) {
-    console.log(data);
     ulInventory.innerHTML = "";
 
     data.forEach((item, index) => {
@@ -58,17 +64,13 @@ function getItemsAndDisplay() {
 
       ulInventory.append(li);
 
-      editBtn.addEventListener("click", (e) => {
-        const currentItem = e.target.closest("li");
+      editBtn.addEventListener("click", () => {
+        modalInputId.value = item.id;
+        modalProductName.value = item.itemName;
+        modalProductQuantity.value = item.itemQuantity;
+        modalProductLocation.value = item.itemLocation;
 
         editModal.classList.remove("hidden");
-        btnCloseModal.addEventListener("click", () => {
-          editModal.classList.add("hidden");
-        });
-        console.log(inputNewName);
-        // currentItem.innerHTML = "";
-        currentItem.append(inputNewName);
-        console.log(currentItem.dataset.id);
       });
     });
     checkForLowStock(data);
@@ -112,6 +114,32 @@ function checkForLowStock(item = []) {
   console.log(lowStock);
 }
 
+function editItem() {
+  let storage = JSON.parse(localStorage.getItem("items")) || [];
+
+  let index = storage.findIndex(
+    (item) => item.id == Number(modalInputId.value)
+  );
+
+  if (index !== -1) {
+    storage[index] = {
+      id: modalInputId.value,
+      itemName: modalProductName.value,
+      itemQuantity: Number(modalProductQuantity.value),
+      itemLocation: modalProductLocation.value,
+    };
+
+    localStorage.setItem("items", JSON.stringify(storage));
+
+    console.log("Item updated successfully:", storage[index]);
+
+    getItemsAndDisplay();
+    checkForLowStock(storage);
+  } else {
+    console.log("Item not found.");
+  }
+}
+
 function clearLocalStorage() {
   localStorage.clear();
   getItemsAndDisplay();
@@ -119,5 +147,23 @@ function clearLocalStorage() {
 }
 
 btnClearLocalStorage.addEventListener("click", clearLocalStorage);
+btnCloseModal.addEventListener("click", () => {
+  editModal.classList.add("hidden");
+});
+
+btnSaveModal.addEventListener("click", (e) => {
+  e.preventDefault();
+  editItem();
+
+  modalTitle.textContent = "Item updated successfully";
+
+  modalForm.classList.add("hidden");
+  const interval = setInterval(() => {
+    editModal.classList.add("hidden");
+    modalTitle.textContent = "Edit item's details:";
+    modalForm.classList.remove("hidden");
+    clearInterval(interval);
+  }, 3000);
+});
 
 getItemsAndDisplay();

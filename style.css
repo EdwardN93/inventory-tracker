@@ -196,7 +196,7 @@ button:hover {
 .modal-container {
   position: relative;
   display: flex;
-  max-width: 30%;
+  min-width: 30%;
   align-items: center;
   justify-content: center;
   flex-direction: column;
@@ -224,4 +224,8 @@ button:hover {
   align-self: center;
   justify-self: center;
   text-align: center;
+}
+
+.hidden {
+  display: none;
 }
