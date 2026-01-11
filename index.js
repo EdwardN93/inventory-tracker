@@ -163,7 +163,7 @@ btnSaveModal.addEventListener("click", (e) => {
     modalTitle.textContent = "Edit item's details:";
     modalForm.classList.remove("hidden");
     clearInterval(interval);
-  }, 3000);
+  }, 1000);
 });
 
 getItemsAndDisplay();
