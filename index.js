@@ -23,6 +23,7 @@ form.addEventListener("submit", (e) => {
   e.preventDefault();
   setItem(itemName.value, itemQuantity.value, itemLocation.value);
   getItemsAndDisplay();
+  showInfoModal(`Item: ${itemName.value} added successfully`);
   form.reset();
 });
 
@@ -45,7 +46,7 @@ function getItemsAndDisplay() {
   if (data) {
     ulInventory.innerHTML = "";
 
-    data.forEach((item, index) => {
+    data.forEach((item) => {
       const li = document.createElement("li");
       li.dataset.id = item.id;
       const h3Name = document.createElement("h3");
@@ -110,8 +111,6 @@ function checkForLowStock(item = []) {
     ulStockAlert.innerHTML = "";
     lowStockAlert.classList.add("hidden");
   }
-
-  console.log(lowStock);
 }
 
 function editItem() {
@@ -131,12 +130,10 @@ function editItem() {
 
     localStorage.setItem("items", JSON.stringify(storage));
 
-    console.log("Item updated successfully:", storage[index]);
-
     getItemsAndDisplay();
     checkForLowStock(storage);
   } else {
-    console.log("Item not found.");
+    showInfoModal("Item not found");
   }
 }
 
@@ -155,15 +152,20 @@ btnSaveModal.addEventListener("click", (e) => {
   e.preventDefault();
   editItem();
 
-  modalTitle.textContent = "Item updated successfully";
+  showInfoModal("Item updated successfully");
+});
 
+function showInfoModal(message) {
+  modalTitle.textContent = message;
+  editModal.classList.remove("hidden");
   modalForm.classList.add("hidden");
+
   const interval = setInterval(() => {
     editModal.classList.add("hidden");
     modalTitle.textContent = "Edit item's details:";
     modalForm.classList.remove("hidden");
     clearInterval(interval);
-  }, 1000);
-});
+  }, 2000);
+}
 
 getItemsAndDisplay();
