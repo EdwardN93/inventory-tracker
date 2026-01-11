@@ -8,12 +8,6 @@ A simple and efficient **Inventory Tracker** built with **Vanilla JavaScript**, 
 
 👉 _https://edwardn93.github.io/inventory-tracker/_
 
-## 💻 Source Code
-
-👉 _(add GitHub repository link here)_
-
----
-
 ## ✨ Features
 
 - ➕ Add new inventory items
